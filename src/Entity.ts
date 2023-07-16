@@ -1,13 +1,16 @@
-type Transform = {
+export type Transform = {
 	x: number,
 	y: number
 }
 
 export class Entity {	
-	constructor(){
+	constructor(id: string){
 		this._position = { x: 0, y: 0 }
 		this._scale = { x: 1, y: 1}
+		this.id = id
 	}
+
+	public readonly id;
 	
 	private _scale: Transform;
 	private _position: Transform;
@@ -30,7 +33,8 @@ export class Entity {
 	get sprite(): ImageBitmap | undefined {
 		return this._sprite;
 	}
-	set sprite(value: ImageBitmap) {
+	set sprite(value: ImageBitmap | undefined) {
 		this._sprite = value;
 	}
+	update() {}
 }
