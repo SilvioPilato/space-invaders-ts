@@ -8,5 +8,9 @@ export class BoxCollider {
 		this.width = width;
 		this.height = height;
 	}
+
+	get Position(): Transform {
+		return this.entity.position
+	}
 }
 
