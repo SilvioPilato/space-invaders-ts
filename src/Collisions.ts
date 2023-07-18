@@ -1,6 +1,6 @@
 import { BoxCollider } from "./BoxCollider";
 export class Collisions {
-	execute(colliders: BoxCollider[]): Array<Array<BoxCollider>> | undefined {
+	execute(colliders: BoxCollider[]): Array<Array<BoxCollider>> {
 		// Sweep and prune algorithm
 		let active = [];
 		let candidates = [];
@@ -9,7 +9,7 @@ export class Collisions {
 
 		for (let i = 0; i < colliders.length; i++) {
 			for (let j = 0; j < active.length; ++j) {
-				if (this.isIntersectingX(active[j], colliders[i]) {
+				if (this.isIntersectingX(active[j], colliders[i])) {
 					candidates.push([active[j], colliders[i]]);
 				} else {
 					active.shift();
@@ -41,10 +41,10 @@ export class Collisions {
 
 	private isIntersectingY(left: BoxCollider, right: BoxCollider): boolean {
 		// AABB collision detection
-		const leftMinY = left.Position.y + left.height;
-		const rightMinY = right.Position.y + right.height;
-		const leftMaxY = left.Position.y;
-		const rightMaxY = right.Position.y;
+		const leftMaxY= left.Position.y + left.height;
+		const rightMaxY = right.Position.y + right.height;
+		const leftMinY = left.Position.y;
+		const rightMinY = right.Position.y;
 
 		if (rightMaxY < leftMinY) return false;
 		if (leftMaxY < rightMinY) return false;

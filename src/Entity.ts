@@ -1,3 +1,5 @@
+import { BoxCollider } from "./BoxCollider"
+
 export type Transform = {
 	x: number,
 	y: number
@@ -37,4 +39,7 @@ export class Entity {
 		this._sprite = value;
 	}
 	update() {}
+
+	onCollisionStart(collider: BoxCollider) {
+	}
 }

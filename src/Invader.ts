@@ -1,3 +1,4 @@
+import { BoxCollider } from "./BoxCollider";
 import { Engine } from "./Engine";
 import { Entity } from "./Entity";
 
@@ -29,5 +30,11 @@ export class Invader extends Entity {
 			this.travelDown = true;
 		}
 
+	}
+
+	onCollisionStart(collider: BoxCollider): void {
+		if (collider.entity.id != "player-ship") {
+			Engine.removeEntity(this);
+		}
 	}
 }
