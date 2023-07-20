@@ -3,6 +3,7 @@ import { Bullet } from "./Bullet";
 import { Engine } from "./Engine";
 import { Entity } from "./Entity";
 import { KeyboardHandler } from "./KeyboardHandler";
+import { SpriteComponent } from "./SpriteComponent";
 export class Player extends Entity {
 	private _playerSpeed = 0.5;
 	public bulletPng ?: ImageBitmap;	
@@ -10,6 +11,15 @@ export class Player extends Entity {
         private _shotCD = 250;
 	private _currentShotCD = 0;
 	private _reloading = false;
+	private bulletSpawnY = 32;
+	private bulletScale = {x: 1, y: 2};
+	
+	setup(): void 
+	{
+		if(!this.sprite) return;
+		this.renderComponent = new SpriteComponent(this.sprite);
+	}
+
 	update() {
 		if (this._reloading) {
 			this._currentShotCD += Engine.DeltaTime;
@@ -28,9 +38,9 @@ export class Player extends Entity {
 			if (!this.sprite) return;
 			const bullet = new Bullet(`bullet-${this._bulletShot}`);	
 			const posX = this.position.x + (this.sprite.width * this.scale.x) /2;
-			bullet.position = {x: posX, y: this.position.y - 16};
+			bullet.position = {x: posX, y: this.position.y + this.bulletSpawnY};
 			bullet.sprite = this.bulletPng;
-			bullet.scale = {x: 1, y: 2}
+			bullet.scale = this.bulletScale; 
 			Engine.addEntity(bullet);
 			if (this.bulletPng) {
 				const collider = new BoxCollider(

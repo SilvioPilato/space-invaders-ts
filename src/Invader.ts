@@ -1,6 +1,8 @@
 import { BoxCollider } from "./BoxCollider";
 import { Engine } from "./Engine";
 import { Entity } from "./Entity";
+import { SpriteComponent } from "./SpriteComponent";
+import { GameChannel } from "./channels/GameChannel";
 
 export class Invader extends Entity {
 	private xDirection = 1; // 1 = right -1 = left
@@ -10,6 +12,7 @@ export class Invader extends Entity {
 	private yTraveled = 0;
 	private distToSwitchY = 32;
 	private travelDown = false;
+	private onDeath ?: EventTarget;
 	update(): void {
 		if (this.travelDown) {
 			this.position.y += this.speed * Engine.DeltaTime;
@@ -18,7 +21,6 @@ export class Invader extends Entity {
 				this.travelDown = false;
 				this.yTraveled = 0;
 			}
-
 			return;
 		}
 
@@ -32,9 +34,15 @@ export class Invader extends Entity {
 
 	}
 
+	setup(): void 
+	{
+		if(!this.sprite) return;
+		this.renderComponent = new SpriteComponent(this.sprite);
+	}
+
 	onCollisionStart(collider: BoxCollider): void {
-		if (collider.entity.id != "player-ship") {
-			Engine.removeEntity(this);
-		}
+		if (collider.entity.id == "player-ship") return;
+		GameChannel.EventTarget.dispatchEvent(new CustomEvent("invader-down"));
+		Engine.removeEntity(this);
 	}
 }

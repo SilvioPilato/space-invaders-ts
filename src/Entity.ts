@@ -1,4 +1,5 @@
 import { BoxCollider } from "./BoxCollider"
+import { RenderComponent } from "./Renderer"
 
 export type Transform = {
 	x: number,
@@ -13,11 +14,11 @@ export class Entity {
 	}
 
 	public readonly id;
-	
+ 	
 	private _scale: Transform;
 	private _position: Transform;
 	private _sprite ?: ImageBitmap;
-
+        private _renderComponent ?: RenderComponent;
 	get position(): Transform {
 		return this._position;
 	}
@@ -38,8 +39,13 @@ export class Entity {
 	set sprite(value: ImageBitmap | undefined) {
 		this._sprite = value;
 	}
-	update() {}
-
-	onCollisionStart(collider: BoxCollider) {
+	get renderComponent() : RenderComponent | undefined {
+		return this._renderComponent;
 	}
+	set renderComponent(component: RenderComponent) {
+		this._renderComponent = component;
+	}
+	update() {}
+        setup() {}
+	onCollisionStart(collider: BoxCollider) {}
 }

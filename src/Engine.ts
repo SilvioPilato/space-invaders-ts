@@ -4,8 +4,9 @@ import { Entity } from "./Entity";
 import { Renderer } from "./Renderer";
 
 export class Engine {
-	private static _deltaTime = 0.0;
+	private static _deltaTime: number;
 	private static _activeEntities: Entity[] = [];
+	private static _entitiesToSetup: Set<Entity>;
 	private static _activeColliders: BoxCollider[] = [];
 	private static _entitiesToRemove: Set<Entity>;
 	private collisions: Collisions;
@@ -23,10 +24,11 @@ export class Engine {
 		this._renderer = renderer;
 		this.collisions = collisions;
 		Engine._entitiesToRemove = new Set();
+		Engine._entitiesToSetup = new Set();
 	}
 
 	static addEntity(entity: Entity) {
-		Engine._activeEntities.push(entity);	
+		Engine._entitiesToSetup.add(entity);	
 	}
 
 	static addCollider(collider: BoxCollider) {
@@ -37,13 +39,13 @@ export class Engine {
 		this._entitiesToRemove.add(entity);	
 	}
 
-	tick() {		
-		if (Engine.DeltaTime <= 0) {
-			this.startTime = Date.now();
+	tick(timestamp: DOMHighResTimeStamp) {
+		const ts = timestamp.valueOf();
+		if (Engine.DeltaTime == undefined) {
+			this.startTime = ts; 
 		}
-
 		// preupdate phase
-		//
+		Engine._deltaTime = ts - this.startTime;
 		// this entity deletion method is pretty inefficient
 		for (let entity of Engine._entitiesToRemove) {
 			Engine._activeEntities = Engine._activeEntities.filter(active => active.id != entity.id);
@@ -51,12 +53,16 @@ export class Engine {
 			Engine._entitiesToRemove.delete(entity);
 		}
 
+		for (let entity of Engine._entitiesToSetup) {
+			entity.setup();
+			Engine._activeEntities.push(entity);
+			Engine._entitiesToSetup.delete(entity);
+		}
 		// update phase
 		for (let entity of Engine.ActiveEntities) {
 			entity.update();
 		}
-
-		// collision phase	
+	
 		let collidingPairs = this.collisions.execute(Engine._activeColliders);
 		for (let [collidingA, collidingB] of collidingPairs) {
 			collidingA.entity.onCollisionStart(collidingB);
@@ -65,8 +71,6 @@ export class Engine {
 		
 		// Post update phase
 		this._renderer.render(Engine.ActiveEntities);
-		const now = Date.now();
-		Engine._deltaTime = now - this.startTime;
-		this.startTime = now;
+		this.startTime = ts;
 	}
 }

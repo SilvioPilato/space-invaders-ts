@@ -15,17 +15,11 @@ export class Renderer {
         this.context.clearRect(0,0, this.canvas.width, this.canvas.height);
 
 	for (let entity of entities) {
-		if (!entity.sprite) {
-			continue;
-		}
-		this.context.drawImage(
-			entity.sprite,
-			entity.position.x, 
-			entity.position.y,
-			entity.sprite.width * entity.scale.x,
-			entity.sprite.height * entity.scale.y,
-		);
-	    
+		entity.renderComponent?.render(entity, this.context);
 	}
     }  
+}
+
+export interface RenderComponent {
+    render: (entity: Entity, context: CanvasRenderingContext2D ) => void;
 }

@@ -12,6 +12,8 @@ import invaderPng from './assets/img/alien.png';
 import bulletPng from './assets/img/bullet.png';
 import { Collisions } from './Collisions';
 import { BoxCollider } from './BoxCollider';
+import { SpriteComponent } from './SpriteComponent';
+import { Score } from './Score';
 
 // fetch resources
 const images = await Promise.all([
@@ -37,34 +39,36 @@ const engine = new Engine(renderer, collisions);
 
 // load entities
 const background = new Entity('bg');
-const ship = new Player('player-ship');
-ship.bulletPng = bulletImage;
 
 background.scale = {
 	x: canvas.width / bgImage.width,
 	y: canvas.height / bgImage.height,
 }
+background.renderComponent = new SpriteComponent(bgImage);
+
+const ship = new Player('player-ship');
 const shipScale = {
 	x: 0.2,
 	y: 0.2
 }
 ship.position = {
 	x: canvas.width / 2 - (shipImage.width * shipScale.x) / 2,
-	y: canvas.height - shipImage.height * shipScale.y * 2
+	y: canvas.height - shipImage.height * shipScale.y * 3/2
 }
 ship.scale = shipScale;
-background.sprite = bgImage;
 ship.sprite = shipImage;
+ship.bulletPng = bulletImage;
 
 const shipCollider = new BoxCollider(
 	ship, 
 	ship.sprite.width * ship.scale.x, 
 	ship.sprite.height * ship.scale.y
 );
+const score = new Score('player-score');
 Engine.addCollider(shipCollider);
-
 Engine.addEntity(background);
 Engine.addEntity(ship);
+Engine.addEntity(score);
 
 let rows = 3;
 let cols = 8;
@@ -93,8 +97,8 @@ for (let row = 0; row < rows; row++) {
 		Engine.addEntity(invader);
 	}
 }
-const gameLoop = () => {
-	engine.tick();
+const gameLoop = (timestamp: DOMHighResTimeStamp) => {
+	engine.tick(timestamp);
 	requestAnimationFrame(gameLoop);
 }
 requestAnimationFrame(gameLoop);
