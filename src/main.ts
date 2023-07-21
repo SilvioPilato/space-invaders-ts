@@ -1,19 +1,20 @@
 import './style.css';
-import { Engine } from './Engine';
-import { Entity } from './Entity';
-import { ImageLoader } from './ImageLoader';
-import { KeyboardHandler } from './KeyboardHandler';
+import { Engine } from './Core/Engine';
+import { Entity } from './Core/Entity';
+import { ImageLoader } from './Core/ImageLoader';
+import { KeyboardHandler } from './Core/KeyboardHandler';
 import { Player } from './Player';
-import { Renderer } from './Renderer';
+import { Renderer } from './Core/Renderer';
 import { Invader } from "./Invader";
 import bgPng from './assets/img/bg.png';
 import shipPng from './assets/img/ship.png';
 import invaderPng from './assets/img/alien.png';
 import bulletPng from './assets/img/bullet.png';
-import { Collisions } from './Collisions';
-import { BoxCollider } from './BoxCollider';
-import { SpriteComponent } from './SpriteComponent';
+import { Collisions } from './Core/Collisions';
+import { BoxCollider } from './Core/BoxCollider';
+import { SpriteComponent } from './Core/SpriteComponent';
 import { Score } from './Score';
+import { GameManager } from './GameManager';
 
 // fetch resources
 const images = await Promise.all([
@@ -64,7 +65,8 @@ const shipCollider = new BoxCollider(
 	ship.sprite.width * ship.scale.x, 
 	ship.sprite.height * ship.scale.y
 );
-const score = new Score('player-score');
+const score = new Score('player-score'); 
+score.position = {x: canvas.width * 4/5, y: 32 }
 Engine.addCollider(shipCollider);
 Engine.addEntity(background);
 Engine.addEntity(ship);
@@ -97,6 +99,7 @@ for (let row = 0; row < rows; row++) {
 		Engine.addEntity(invader);
 	}
 }
+new GameManager(rows * cols);
 const gameLoop = (timestamp: DOMHighResTimeStamp) => {
 	engine.tick(timestamp);
 	requestAnimationFrame(gameLoop);

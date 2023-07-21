@@ -13,4 +13,6 @@ export class KeyboardHandler {
 	static isPressed(keyCode: string) {
 		return KeyboardHandler._inputSink.has(keyCode);
 	}
+
+
 }

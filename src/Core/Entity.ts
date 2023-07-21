@@ -18,7 +18,8 @@ export class Entity {
 	private _scale: Transform;
 	private _position: Transform;
 	private _sprite ?: ImageBitmap;
-        private _renderComponent ?: RenderComponent;
+    private _renderComponent ?: RenderComponent;
+	
 	get position(): Transform {
 		return this._position;
 	}
@@ -32,20 +33,22 @@ export class Entity {
 	set scale(value: Transform) {
 		this._scale = value;
 	}
-	
+
 	get sprite(): ImageBitmap | undefined {
 		return this._sprite;
 	}
 	set sprite(value: ImageBitmap | undefined) {
 		this._sprite = value;
 	}
+
 	get renderComponent() : RenderComponent | undefined {
 		return this._renderComponent;
 	}
 	set renderComponent(component: RenderComponent) {
 		this._renderComponent = component;
 	}
+
 	update() {}
-        setup() {}
+    setup() {}
 	onCollisionStart(collider: BoxCollider) {}
 }

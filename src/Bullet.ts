@@ -1,7 +1,7 @@
-import { BoxCollider } from "./BoxCollider";
-import { Engine } from "./Engine";
-import { Entity } from "./Entity";
-import { SpriteComponent } from "./SpriteComponent";
+import { BoxCollider } from "./Core/BoxCollider";
+import { Engine } from "./Core/Engine";
+import { Entity } from "./Core/Entity";
+import { SpriteComponent } from "./Core/SpriteComponent";
 
 export class Bullet extends Entity {
 	speed = 0.5;

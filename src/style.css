@@ -1,3 +1,7 @@
+@font-face {
+  font-family: pixel-lcd-7;
+  src: url(assets/fonts/Pixel-LCD-7.woff);
+}
 canvas {
   image-rendering: pixelated;
 }

@@ -1,14 +1,14 @@
-import { BoxCollider } from "./BoxCollider";
+import { BoxCollider } from "./Core/BoxCollider";
 import { Bullet } from "./Bullet";
-import { Engine } from "./Engine";
-import { Entity } from "./Entity";
-import { KeyboardHandler } from "./KeyboardHandler";
-import { SpriteComponent } from "./SpriteComponent";
+import { Engine } from "./Core/Engine";
+import { Entity } from "./Core/Entity";
+import { KeyboardHandler } from "./Core/KeyboardHandler";
+import { SpriteComponent } from "./Core/SpriteComponent";
 export class Player extends Entity {
+	public bulletPng ?: ImageBitmap;
 	private _playerSpeed = 0.5;
-	public bulletPng ?: ImageBitmap;	
-        private _bulletShot = 0;
-        private _shotCD = 250;
+    private _bulletShot = 0;
+    private _shotCD = 250;
 	private _currentShotCD = 0;
 	private _reloading = false;
 	private bulletSpawnY = 32;
