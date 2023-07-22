@@ -1,6 +1,7 @@
 import { BoxCollider } from "./BoxCollider";
 import { Collisions } from "./Collisions";
 import { Entity } from "./Entity";
+import { KeyboardHandler } from "./KeyboardHandler";
 import { Renderer } from "./Renderer";
 
 export class Engine {
@@ -9,24 +10,28 @@ export class Engine {
 	private static _entitiesToSetup: Set<Entity>;
 	private static _activeColliders: BoxCollider[] = [];
 	private static _entitiesToRemove: Set<Entity>;
-	private collisions: Collisions;
+	private static _timeScale: number = 1;
+	private _collisions: Collisions;
 	private _renderer: Renderer;
-	private startTime = 0.0;
+	private _inputHandler: KeyboardHandler;
+	private _startTime = 0.0;
 
-	static get DeltaTime() {
-		return Engine._deltaTime;
-	};
-	static get ActiveEntities(): Entity[] {
-		return Engine._activeEntities;
-	};
-
-	constructor(renderer: Renderer, collisions: Collisions) {
+	constructor(renderer: Renderer, collisions: Collisions, inputHandler: KeyboardHandler) {
 		this._renderer = renderer;
-		this.collisions = collisions;
+		this._collisions = collisions;
+		this._inputHandler = inputHandler;
 		Engine._entitiesToRemove = new Set();
 		Engine._entitiesToSetup = new Set();
 	}
 
+	static get DeltaTime() {
+		return Engine._deltaTime;
+	};
+	
+	static get ActiveEntities(): Entity[] {
+		return Engine._activeEntities;
+	};
+	
 	static addEntity(entity: Entity) {
 		Engine._entitiesToSetup.add(entity);	
 	}
@@ -38,14 +43,29 @@ export class Engine {
 	static removeEntity(entity: Entity) {
 		this._entitiesToRemove.add(entity);	
 	}
+	
+	static get TimeScale() {
+		return Engine._timeScale;
+	}
+
+	static set TimeScale(timescale: number) {
+		Engine._timeScale = timescale;
+	}
+
+	static cleanUp() {
+		// entities will be removed in the next frame
+		for(let entity of Engine.ActiveEntities) {
+			Engine._entitiesToRemove.add(entity);
+		}
+	}
 
 	tick(timestamp: DOMHighResTimeStamp) {
 		const ts = timestamp.valueOf();
 		if (Engine.DeltaTime == undefined) {
-			this.startTime = ts; 
+			this._startTime = ts; 
 		}
 		// preupdate phase
-		Engine._deltaTime = ts - this.startTime;
+		Engine._deltaTime = (ts - this._startTime) * Engine.TimeScale;
 		// this entity deletion method is pretty inefficient
 		for (let entity of Engine._entitiesToRemove) {
 			Engine._activeEntities = Engine._activeEntities.filter(active => active.id != entity.id);
@@ -63,14 +83,15 @@ export class Engine {
 			entity.update();
 		}
 	
-		let collidingPairs = this.collisions.execute(Engine._activeColliders);
+		let collidingPairs = this._collisions.execute(Engine._activeColliders);
 		for (let [collidingA, collidingB] of collidingPairs) {
 			collidingA.entity.onCollisionStart(collidingB);
 			collidingB.entity.onCollisionStart(collidingA);
 		}
 		
 		// Post update phase
+		this._inputHandler.clear();
 		this._renderer.render(Engine.ActiveEntities);
-		this.startTime = ts;
+		this._startTime = ts;
 	}
 }

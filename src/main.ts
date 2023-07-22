@@ -35,8 +35,8 @@ const renderer = new Renderer(canvas);
 document.querySelector<HTMLDivElement>('#app')!.appendChild(canvas);
 
 const collisions = new Collisions();
-new KeyboardHandler();
-const engine = new Engine(renderer, collisions);
+const keyboardHandler = new KeyboardHandler();
+const engine = new Engine(renderer, collisions, keyboardHandler);
 
 // load entities
 const background = new Entity('bg');

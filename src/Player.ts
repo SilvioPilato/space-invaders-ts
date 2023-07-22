@@ -8,7 +8,7 @@ export class Player extends Entity {
 	public bulletPng ?: ImageBitmap;
 	private _playerSpeed = 0.5;
     private _bulletShot = 0;
-    private _shotCD = 250;
+    private _shotCD = 200;
 	private _currentShotCD = 0;
 	private _reloading = false;
 	private bulletSpawnY = 32;
@@ -28,10 +28,10 @@ export class Player extends Entity {
 			this._reloading = false;
 			this._currentShotCD = 0;	
 		}
-		if (KeyboardHandler.isPressed("ArrowLeft")) {
+		if (KeyboardHandler.isHold("ArrowLeft")) {
 			this.position.x -= this._playerSpeed * Engine.DeltaTime;
 		}
-		if (KeyboardHandler.isPressed("ArrowRight")) {
+		if (KeyboardHandler.isHold("ArrowRight")) {
 			this.position.x += this._playerSpeed * Engine.DeltaTime;
 		}
 		if (KeyboardHandler.isPressed("Space") && !this._reloading ) {

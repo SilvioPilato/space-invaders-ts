@@ -22,6 +22,5 @@ export class Score extends Entity {
 
 	increaseScore() {
 		this.currentScore+=this.invaderScore;
-		console.log(this.currentScore);
 	}
 }
