@@ -1,5 +1,8 @@
 import { Entity } from "./Core/Entity";
+import { GameChannel } from "./Core/GameChannel";
+import { KeyboardHandler } from "./Core/KeyboardHandler";
 import { TextComponent } from "./Core/TextComponent";
+import { MUST_RESTART_GAME } from "./Events";
 
 export class RestartText extends Entity {
     private textRender ?: TextComponent;
@@ -17,4 +20,10 @@ export class RestartText extends Entity {
             y: 300,
         }
 	}
+
+    update(): void {
+        if (KeyboardHandler.isPressed("Space")) {
+            GameChannel.EventTarget.dispatchEvent(new CustomEvent(MUST_RESTART_GAME));
+        } 
+    }
 }

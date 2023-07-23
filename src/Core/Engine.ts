@@ -8,6 +8,7 @@ export class Engine {
 	private static _deltaTime: number;
 	private static _activeEntities: Entity[] = [];
 	private static _entitiesToSetup: Set<Entity>;
+	private static _collidersToSetup: Set<BoxCollider>;
 	private static _activeColliders: BoxCollider[] = [];
 	private static _entitiesToRemove: Set<Entity>;
 	private static _timeScale: number = 1;
@@ -22,6 +23,7 @@ export class Engine {
 		this._inputHandler = inputHandler;
 		Engine._entitiesToRemove = new Set();
 		Engine._entitiesToSetup = new Set();
+		Engine._collidersToSetup = new Set();
 	}
 
 	static get DeltaTime() {
@@ -37,7 +39,7 @@ export class Engine {
 	}
 
 	static addCollider(collider: BoxCollider) {
-		Engine._activeColliders.push(collider);
+		Engine._collidersToSetup.add(collider);
 	}
 
 	static removeEntity(entity: Entity) {
@@ -78,6 +80,12 @@ export class Engine {
 			Engine._activeEntities.push(entity);
 			Engine._entitiesToSetup.delete(entity);
 		}
+
+		for (let collider of Engine._collidersToSetup) {
+			Engine._activeColliders.push(collider);
+			Engine._collidersToSetup.delete(collider);
+		}
+
 		// update phase
 		for (let entity of Engine.ActiveEntities) {
 			entity.update();

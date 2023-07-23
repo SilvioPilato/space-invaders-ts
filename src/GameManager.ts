@@ -1,19 +1,27 @@
 import { Engine } from "./Core/Engine";
 import { GameChannel } from "./Core/GameChannel";
-import { INVADER_DOWN, INVADER_TOUCH } from "./Events";
+import { INVADER_DOWN, INVADER_TOUCH, MUST_RESTART_GAME } from "./Events";
+import { Game } from "./Game";
 import { GameResultText } from "./GameResultText";
 import { RestartText } from "./RestartText";
 
 export class GameManager {
-    private invadersAlive = 30;
+    private startingInvaders = 30;
+    private invadersAlive = 0;
     private playing = true;
     private winText = "YOU WON";
     private loseText = "YOU LOST";
-    constructor(invadersAlive: number) {
-        this.invadersAlive = invadersAlive;
+    private game: Game;
+
+    constructor(startingInvaders: number, game: Game) {
+        this.startingInvaders = startingInvaders;
+        this.invadersAlive = startingInvaders;
         GameChannel.EventTarget.addEventListener(INVADER_DOWN, this.OnInvaderDead.bind(this));
         GameChannel.EventTarget.addEventListener(INVADER_TOUCH, this.OnInvaderTouch.bind(this));
+        GameChannel.EventTarget.addEventListener(MUST_RESTART_GAME, this.restartGame.bind(this));
+        this.game = game;
     }
+
     private OnInvaderDead() {
         this.invadersAlive--;
         if (this.invadersAlive == 0) {
@@ -31,7 +39,6 @@ export class GameManager {
         Engine.TimeScale = 0;
         this.addResultText(this.winText);
         this.addRestartText();
-        
     }
 
     private LoseGame() {
@@ -51,5 +58,13 @@ export class GameManager {
     private addRestartText() {
         const text = new RestartText("result-text")
         Engine.addEntity(text);
+    }
+
+    private restartGame() {
+        Engine.cleanUp();
+        Engine.TimeScale = 1;
+        this.playing = true;
+        this.invadersAlive = this.startingInvaders;
+        this.game.start();
     }
 }

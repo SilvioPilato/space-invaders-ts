@@ -38,7 +38,6 @@ export class Invader extends Entity {
 		const movement = this.xDirection * this.speed * Engine.DeltaTime;
 		this.position.x += movement;
 		this.traveled += movement;
-		console.log(this.traveled)
 		if (this.traveled >= this.distToSwitchX || this.traveled < 0) {
 			this.xDirection = -this.xDirection;
 			this.travelDown = true;
