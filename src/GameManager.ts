@@ -16,10 +16,10 @@ export class GameManager {
     constructor(startingInvaders: number, game: Game) {
         this.startingInvaders = startingInvaders;
         this.invadersAlive = startingInvaders;
+        this.game = game;
         GameChannel.EventTarget.addEventListener(INVADER_DOWN, this.OnInvaderDead.bind(this));
         GameChannel.EventTarget.addEventListener(INVADER_TOUCH, this.OnInvaderTouch.bind(this));
         GameChannel.EventTarget.addEventListener(MUST_RESTART_GAME, this.restartGame.bind(this));
-        this.game = game;
     }
 
     private OnInvaderDead() {

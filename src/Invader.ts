@@ -1,6 +1,6 @@
 import { BoxCollider } from "./Core/BoxCollider";
 import { Engine } from "./Core/Engine";
-import { Entity } from "./Core/Entity";
+import { Entity, Transform } from "./Core/Entity";
 import { SpriteComponent } from "./Core/SpriteComponent";
 import { GameChannel } from "./Core/GameChannel";
 import { INVADER_DOWN, INVADER_TOUCH } from "./Events";
@@ -10,15 +10,16 @@ export class Invader extends Entity {
 	private speed = 0.07;
 	public distToSwitchX = 100;
 	private traveled = 0;
-	private yTraveled = 0;
 	private distToSwitchY = 32;
 	private travelDown = false;
 	private touchThreshold = 500;
+	private originPosition: Transform;
 	
 	setup(): void 
 	{
 		if(!this.sprite) return;
 		this.renderComponent = new SpriteComponent(this.sprite);
+		this.originPosition = {x: this.position.x, y: this.position.y};
 	}
 
 	update(): void {
@@ -26,22 +27,26 @@ export class Invader extends Entity {
 			GameChannel.EventTarget.dispatchEvent(new CustomEvent(INVADER_TOUCH));
 		}
 		if (this.travelDown) {
-			this.position.y += this.speed * Engine.DeltaTime;
-			this.yTraveled += this.speed * Engine.DeltaTime;
-			if (this.yTraveled >= this.distToSwitchY) {
+			const movement = this.position.y + this.speed * Engine.DeltaTime;
+			const positionY = Math.min(this.originPosition.y + this.distToSwitchY, movement);
+			if (movement >= this.originPosition.y + this.distToSwitchY) {
+				this.originPosition.y = this.position.y;
 				this.travelDown = false;
-				this.yTraveled = 0;
 			}
+			this.position.y = positionY;
 			return;
 		}
+		
+		const movement = this.position.x + this.speed * Engine.DeltaTime * this.xDirection;
+		const maxMove = this.originPosition.x + this.distToSwitchX * this.xDirection;
+		const positionX = this.xDirection > 0 ? Math.min(maxMove, movement) : Math.max(maxMove, movement);
 
-		const movement = this.xDirection * this.speed * Engine.DeltaTime;
-		this.position.x += movement;
-		this.traveled += movement;
-		if (this.traveled >= this.distToSwitchX || this.traveled < 0) {
+		if ((this.xDirection > 0 && movement>= maxMove) || (this.xDirection < 0 && movement<=maxMove)) {
+			this.originPosition.x = this.position.x;
 			this.xDirection = -this.xDirection;
 			this.travelDown = true;
 		}
+		this.position.x = positionX;
 	}
 
 	onCollisionStart(collider: BoxCollider): void {
