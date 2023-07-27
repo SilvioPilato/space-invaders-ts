@@ -7,17 +7,19 @@ import { SpriteComponent } from "./Core/SpriteComponent";
 export class Player extends Entity {
 	public bulletPng ?: ImageBitmap;
 	private _playerSpeed = 0.5;
-    private _bulletShot = 0;
-    private _shotCD = 200;
+	private _bulletShot = 0;
+	private _shotCD = 200;
 	private _currentShotCD = 0;
 	private _reloading = false;
 	private bulletSpawnY = 32;
 	private bulletScale = {x: 1, y: 2};
-	
+        private minX = 20;
+	private maxX = 780;
 	setup(): void 
 	{
 		if(!this.sprite) return;
 		this.renderComponent = new SpriteComponent(this.sprite);
+		this.maxX -= this.sprite.width * this.scale.x;
 	}
 
 	update() {
@@ -28,10 +30,10 @@ export class Player extends Entity {
 			this._reloading = false;
 			this._currentShotCD = 0;	
 		}
-		if (KeyboardHandler.isHold("ArrowLeft")) {
+		if (KeyboardHandler.isHold("ArrowLeft") && this.position.x > this.minX) {
 			this.position.x -= this._playerSpeed * Engine.DeltaTime;
 		}
-		if (KeyboardHandler.isHold("ArrowRight")) {
+		if (KeyboardHandler.isHold("ArrowRight")&& this.position.x < this.maxX) {
 			this.position.x += this._playerSpeed * Engine.DeltaTime;
 		}
 		if (KeyboardHandler.isPressed("Space") && !this._reloading ) {
