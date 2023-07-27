@@ -17,9 +17,18 @@ export class GameManager {
         this.startingInvaders = startingInvaders;
         this.invadersAlive = startingInvaders;
         this.game = game;
+        GameChannel.EventTarget.addEventListener(MUST_RESTART_GAME, this.restartGame.bind(this));
+        this.addInvadersEventListeners()
+    }
+
+    private removeInvadersEventListeners() {
+        GameChannel.EventTarget.removeEventListener(INVADER_DOWN, this.OnInvaderDead.bind(this));
+        GameChannel.EventTarget.removeEventListener(INVADER_TOUCH, this.OnInvaderTouch.bind(this));
+    }
+
+    private addInvadersEventListeners() {
         GameChannel.EventTarget.addEventListener(INVADER_DOWN, this.OnInvaderDead.bind(this));
         GameChannel.EventTarget.addEventListener(INVADER_TOUCH, this.OnInvaderTouch.bind(this));
-        GameChannel.EventTarget.addEventListener(MUST_RESTART_GAME, this.restartGame.bind(this));
     }
 
     private OnInvaderDead() {
@@ -35,6 +44,7 @@ export class GameManager {
     
     private WinGame(){
         if (!this.playing) return;
+        this.removeInvadersEventListeners();
         this.playing = false;
         Engine.TimeScale = 0;
         this.addResultText(this.winText);
@@ -44,6 +54,7 @@ export class GameManager {
     private LoseGame() {
         if (!this.playing) return;
         this.playing = false;
+        this.removeInvadersEventListeners();
         Engine.TimeScale = 0;
         this.addResultText(this.loseText);
         this.addRestartText();
@@ -63,8 +74,9 @@ export class GameManager {
     private restartGame() {
         Engine.cleanUp();
         Engine.TimeScale = 1;
-        this.playing = true;
         this.invadersAlive = this.startingInvaders;
         this.game.start();
+        this.playing = true;
+        this.addInvadersEventListeners();
     }
 }

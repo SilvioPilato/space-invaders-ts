@@ -9,11 +9,10 @@ export class Invader extends Entity {
 	private xDirection = 1; // 1 = right -1 = left
 	private speed = 0.07;
 	public distToSwitchX = 100;
-	private traveled = 0;
 	private distToSwitchY = 32;
 	private travelDown = false;
 	private touchThreshold = 500;
-	private originPosition: Transform;
+	private originPosition: Transform = {x: this.position.x, y: this.position.y};
 	
 	setup(): void 
 	{
