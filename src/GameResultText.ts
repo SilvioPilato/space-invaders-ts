@@ -1,5 +1,5 @@
-import { Entity } from "./Core/Entity";
-import { TextComponent } from "./Core/TextComponent";
+import { Entity } from "./../2gong/src/Entity";
+import { TextComponent } from "./../2gong/src/TextComponent";
 
 export class GameResultText extends Entity {
     private textRender ?: TextComponent;

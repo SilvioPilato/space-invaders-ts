@@ -1,9 +1,9 @@
-import { BoxCollider } from "./Core/BoxCollider";
+import { BoxCollider } from "./../2gong/src/BoxCollider";
 import { Bullet } from "./Bullet";
-import { Engine } from "./Core/Engine";
-import { Entity } from "./Core/Entity";
-import { KeyboardHandler } from "./Core/KeyboardHandler";
-import { SpriteComponent } from "./Core/SpriteComponent";
+import { Engine } from "../2gong/src/Engine";
+import { Entity } from "../2gong/src/Entity";
+import { KeyboardHandler } from "../2gong/src/KeyboardHandler";
+import { SpriteComponent } from "../2gong/src/SpriteComponent";
 export class Player extends Entity {
 	public bulletPng ?: ImageBitmap;
 	private _playerSpeed = 0.5;

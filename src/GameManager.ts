@@ -1,5 +1,5 @@
-import { Engine } from "./Core/Engine";
-import { GameChannel } from "./Core/GameChannel";
+import { Engine } from "../2gong/src/Engine";
+import { GameChannel } from "./GameChannel";
 import { INVADER_DOWN, INVADER_TOUCH, MUST_RESTART_GAME } from "./Events";
 import { Game } from "./Game";
 import { GameResultText } from "./GameResultText";

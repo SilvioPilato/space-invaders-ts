@@ -1,13 +1,13 @@
 import './style.css';
-import { Engine } from './Core/Engine';
-import { ImageLoader } from './Core/ImageLoader';
-import { KeyboardHandler } from './Core/KeyboardHandler';
-import { Renderer } from './Core/Renderer';
+import { Engine } from '../2gong/src/Engine';
+import { ImageLoader } from '../2gong/src/ImageLoader';
+import { KeyboardHandler } from '../2gong/src/KeyboardHandler';
+import { Renderer } from '../2gong/src/Renderer';
 import bgPng from './assets/img/bg.png';
 import shipPng from './assets/img/ship.png';
 import invaderPng from './assets/img/alien.png';
 import bulletPng from './assets/img/bullet.png';
-import { Collisions } from './Core/Collisions';
+import { Collisions } from '../2gong/src/Collisions';
 import { GameManager } from './GameManager';
 import { Game } from './Game';
 

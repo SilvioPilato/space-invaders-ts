@@ -1,8 +1,8 @@
-import { BoxCollider } from "./Core/BoxCollider";
-import { Engine } from "./Core/Engine";
-import { Entity, Transform } from "./Core/Entity";
-import { SpriteComponent } from "./Core/SpriteComponent";
-import { GameChannel } from "./Core/GameChannel";
+import { BoxCollider } from "../2gong/src/BoxCollider";
+import { Engine } from "../2gong/src/Engine";
+import { Entity, Transform } from "../2gong/src/Entity";
+import { SpriteComponent } from "../2gong/src/SpriteComponent";
+import { GameChannel } from "./GameChannel";
 import { INVADER_DOWN, INVADER_TOUCH } from "./Events";
 
 export class Invader extends Entity {

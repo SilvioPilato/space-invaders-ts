@@ -1,6 +1,6 @@
-import { Entity } from './Core/Entity';
-import { TextComponent } from "./Core/TextComponent"
-import { GameChannel } from './Core/GameChannel';
+import { Entity } from '../2gong/src/Entity';
+import { TextComponent } from "../2gong/src/TextComponent"
+import { GameChannel } from './GameChannel';
 import { INVADER_DOWN } from './Events';
 export class Score extends Entity {	
 	private currentScore: number = 0;

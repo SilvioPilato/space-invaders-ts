@@ -1,7 +1,7 @@
-import { Entity } from "./Core/Entity";
-import { GameChannel } from "./Core/GameChannel";
-import { KeyboardHandler } from "./Core/KeyboardHandler";
-import { TextComponent } from "./Core/TextComponent";
+import { Entity } from "../2gong/src/Entity";
+import { GameChannel } from "./GameChannel";
+import { KeyboardHandler } from "../2gong/src/KeyboardHandler";
+import { TextComponent } from "../2gong/src/TextComponent";
 import { MUST_RESTART_GAME } from "./Events";
 
 export class RestartText extends Entity {
